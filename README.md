@@ -1,144 +1,190 @@
-Contribution: 2019-11-11 20:00
+# IdentitySwap: An On-Chain DeFi Identity Gateway
 
-Contribution: 2019-11-11 20:01
+## Summary
 
-Contribution: 2019-11-11 20:02
+IdentitySwap is an Automatic Money Market (AMM) dApp that 
+demonstrates the concept of Decentralised Identity on the 
+Solana SPL Token-Swap program. A user can interact with a 
+liquidity pool only if they are in possession of a valid 
+identity account, certified by a trusted identity validator. 
 
-Contribution: 2019-11-11 20:03
+The association of an identity account with a transaction is stored on-chain.
 
-Contribution: 2019-11-11 20:04
+## Solana Hackathon Submission
 
-Contribution: 2019-11-11 20:05
+### Repos
 
-Contribution: 2019-11-11 20:06
+The hackathon submission is made up of two repositories:
 
-Contribution: 2019-11-11 20:07
+- [IdentitySwap](https://github.com/civicteam/identity-swap): A UI for the SPL Token-Swap and Identity programs.
+- [civicteam/solana-program-library](https://github.com/civicteam/solana-program-library): A fork of the Solana SPL repository including the Identity program 
 
-Contribution: 2019-11-11 20:08
+### Demo
 
-Contribution: 2019-11-11 20:09
+See [here](https://civicteam.github.io/identity-swap/) for a demo and walkthrough.
+See [here](https://civicteam.github.io/identity-swap/faq) for an FAQ on the project.
 
-Contribution: 2019-11-12 20:00
+## Motivation
 
-Contribution: 2019-11-12 20:01
+Defi services have traditionally been anonymous/pseudonymous, 
+in that they do not require any user identification or KYC to use. 
 
-Contribution: 2019-11-13 20:00
+While in many ways this is a good thing, it leads to services 
+such as Uniswap being used for 
+[money-laundering](https://www.forbes.com/sites/pawelkuskowski/2020/09/30/kucoin-hack-is-proof-that-money-laundering-risk-with-defi-is-rising/),
+which, in turn, attracts the attention of 
+[government regulators](https://www.newsbtc.com/all/uniswaps-uni-token-plunges-as-investors-fear-a-regulatory-crackdown/). 
 
-Contribution: 2019-11-13 20:01
+Centralised exchanges that previously emphasised anonymity, 
+such as [BitMEX](https://www.coindesk.com/bitmex-accelerates-identity-verification-kyc),
+have recently integrated KYC to avoid the 
+risk of being shut down by regulators. 
 
-Contribution: 2019-11-13 20:02
+Adding KYC or Identity in any form to DEXes is a much more 
+complicated matter, however. 
 
-Contribution: 2019-11-13 20:03
+The nature of a DEX is that any attempts to impose a KYC wall 
+can be circumvented by interacting directly with the smart contracts. 
 
-Contribution: 2019-11-13 20:04
+And in the general case, on-chain identity is a concept that has 
+not yet taken hold, but has been on the horizon for
+[some years now](https://consensys.net/blockchain-use-cases/digital-identity). 
 
-Contribution: 2019-11-13 20:05
+The “identity primitives” for decentralised identity, however, 
+are relatively well established, and are being curated and 
+developed by the
+[Decentralised Identity Foundation](https://identity.foundation/).
 
-Contribution: 2019-11-13 20:06
+## Submission
 
-Contribution: 2019-11-17 20:00
+As a submission to the Solana Hackathon, we have added an identity layer to Solana,
+in the form of "Identity Accounts".
 
-Contribution: 2019-11-17 20:01
+### Identity Accounts
 
-Contribution: 2019-11-17 20:02
+Identity Accounts represent a user’s Decentralised Identity (DID) on-chain,
+and can therefore be passed as inputs into Solana programs in the same way
+as other Solana accounts.
 
-Contribution: 2019-11-17 20:03
+These accounts are managed by a new
+[Identity Program](https://github.com/civicteam/solana-program-library/tree/master/identity/program),
+which can respond to challenges from other Solana programs that have Identity requirements.
 
-Contribution: 2019-11-17 20:04
+Identity Accounts contain "attestations", which are hashes of
+off-chain Verifiable Credentials.
+Verifiable Credentials (VCs) are collections of claims about a
+user, or a "Subject", that have been signed by an Identity
+Validator (IdV), and can therefore be presented to Identity
+Requesters (IdRs) in order to meet KYC requirements, or other
+identity challenges.
 
-Contribution: 2019-11-17 20:05
+### Token-Swap Identity Gate
 
-Contribution: 2019-11-17 20:06
+The SPL Token-Swap program has been adapted to require
+a presentation of a valid identity when swapping via a liquidity pool.
 
-Contribution: 2019-11-17 20:07
+In this case, the "Subject" is the user of the liquidity pool,
+either someone wishing to swap, or deposit or withdraw liquidity.
 
-Contribution: 2019-11-17 20:08
+The Identity Requester (IdR) is the pool itself.
+This is an "on-chain”" requester, unlike the off-chain identity
+requesters such as BitMEX or other centralised exchanges or blockchain services.
 
-Contribution: 2019-11-18 20:00
+For the purposes of the hackathon, the Identity Validator is any public/private key pair.
+The public key is passed as a parameter during initialization of the liquidity pool.
 
-Contribution: 2019-11-18 20:01
+Note: users’ personal information is itself not stored on the blockchain
+as part of this project. Transactions are associated with an Identity Account,
+but the identity account by itself does not divulge the identity of the owner.
+Providing this information, for example under audit from a regulator,
+is out of scope for this project, and would be an audit requirement
+of the identity issuer, i.e. the IdV.
 
-Contribution: 2019-11-18 20:02
+## Developer Guide
 
-Contribution: 2019-11-18 20:03
+- [Getting started](#getting-started)
+- [Testing](#testing)
+  * [Unit tests](#unit-tests)
+  * [Integration tests](#integration-tests)
+  * [E2E tests](#e2e-tests)
+- [Building a production version](#building-a-production-version)
+- [Solana Scripts](#solana-scripts)
+  * [Running a local solana cluster](#running-a-local-solana-cluster)
+  * [Building the token-swap program](#building-the-token-swap-program)
 
-Contribution: 2019-11-18 20:04
+### Getting started
 
-Contribution: 2019-11-19 20:00
+Run:
 
-Contribution: 2019-11-19 20:01
+    yarn
+    yarn start
 
-Contribution: 2019-11-19 20:02
+to start the app in the development mode.
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-Contribution: 2019-11-19 20:03
+The page will reload if you make edits.<br />
+You will also see any lint errors in the console.
 
-Contribution: 2019-11-19 20:04
+## Using the App
 
-Contribution: 2019-11-20 20:00
+1. Connect your wallet
+2. Airdrop some test tokens
+3. Register your identity
+4. Swap!
 
-Contribution: 2019-11-20 20:01
+To get test tokens, you can use the [ops scripts](/etc/ops/README.md). 
 
-Contribution: 2019-11-20 20:02
+## Testing
 
-Contribution: 2019-11-20 20:03
+### Unit tests
 
-Contribution: 2019-11-20 20:04
+Run the unit tests using:
 
-Contribution: 2019-11-20 20:05
+    yarn test:unit
+    
+### Integration tests
 
-Contribution: 2019-11-20 20:06
+Integration tests require a local solana cluster, with the token-swap program installed
+(see [Solana Scripts](#solana-scripts) below).
 
-Contribution: 2019-11-21 20:00
+Once you have the token-swap program built and deployed, run the integration tests with
 
-Contribution: 2019-11-21 20:01
+    yarn test:integration
 
-Contribution: 2019-11-21 20:02
+## Building a production version
 
-Contribution: 2019-11-21 20:03
+    yarn build
 
-Contribution: 2019-11-21 20:04
+Builds the app for production to the `build` folder.
 
-Contribution: 2019-11-21 20:05
+## Solana Scripts
 
-Contribution: 2019-11-22 20:00
+### Running a local solana cluster
 
-Contribution: 2019-11-22 20:01
+Download the latest solana docker image using:
+    
+    yarn solana:localnet:update
 
-Contribution: 2019-11-22 20:02
+Then start the solana localnet cluster
 
-Contribution: 2019-11-24 20:00
+    yarn solana:localnet:up
 
-Contribution: 2019-11-24 20:01
+### Building the Solana programs 
 
-Contribution: 2019-11-24 20:02
+Install Rust, follow the instructions here https://rustup.rs/
 
-Contribution: 2019-11-24 20:03
+Build the token-swap program
 
-Contribution: 2019-11-25 20:00
+    yarn solana:build swap
+    
+Build the identity program
 
-Contribution: 2019-11-25 20:01
+    yarn solana:build identity
 
-Contribution: 2019-11-25 20:02
+Load the token-swap program onto the cluster using
 
-Contribution: 2019-11-25 20:03
+    yarn solana:loadProgram swap
 
-Contribution: 2019-11-29 20:00
+Load the identity program onto the cluster using
 
-Contribution: 2019-11-29 20:01
-
-Contribution: 2019-11-29 20:02
-
-Contribution: 2019-11-29 20:03
-
-Contribution: 2019-11-29 20:04
-
-Contribution: 2019-11-29 20:05
-
-Contribution: 2019-11-29 20:06
-
-Contribution: 2019-11-29 20:07
-
-Contribution: 2019-11-29 20:08
-
-Contribution: 2019-11-29 20:09
-
+    yarn solana:loadProgram identity
